@@ -88,4 +88,26 @@ public class UserAPI {
             return new ResponseEntity<>("Failed to retrieve user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> createUserLogin(@RequestBody User user) {
+        try {
+            String email = user.getEmail();
+            String password = user.getPassword();
+            User userLogin = userService.authenticate(email, password);
+
+            if (userLogin == null) {
+                return new ResponseEntity<>("Invalid user credentials", HttpStatus.UNAUTHORIZED);
+            }
+
+            // Return the authenticated user object with a successful status
+            return ResponseEntity.ok(userLogin);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to login: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
 }
