@@ -6,4 +6,5 @@ import lombok.Data;
 @Entity
 @Data
 public class Customer extends User{
+
 }

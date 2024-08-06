@@ -19,10 +19,10 @@ public class OrderAPI {
         try {
             List<Order> OrderList = orderService.findAll();
             if (OrderList.isEmpty()) {
-                return new ResponseEntity<>("The order added successful", HttpStatus.OK);
+                return new ResponseEntity<>("No Order Found", HttpStatus.NOT_FOUND);
 
             } else {
-                return new ResponseEntity<>(OrderList, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(OrderList, HttpStatus.OK);
             }
         } catch (Exception e) {
             return new ResponseEntity<>("The  order was not added", HttpStatus.BAD_REQUEST);
@@ -91,6 +91,12 @@ public class OrderAPI {
             return  new ResponseEntity<>("the order was not updated",HttpStatus.BAD_GATEWAY);
         }
 
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countAllOrders() {
+        Long count = orderService.countAllOrders();
+        return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
 }

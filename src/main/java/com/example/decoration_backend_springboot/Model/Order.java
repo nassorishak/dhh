@@ -14,8 +14,6 @@ public class Order {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int orderId;
 
-        private String name;
-
         private Double totalAmount;
 
         @Temporal(TemporalType.DATE)
@@ -25,11 +23,13 @@ public class Order {
 
         private  String quantity;
 
+        private String size;
+
         @ManyToOne
         @JoinColumn(name="customerID")
         private Customer customer;
 
         @ManyToOne
-        @JoinColumn(name="payment_id")
-        private Payment payment;
+        @JoinColumn(name = "productId")
+        private Product product;
 }

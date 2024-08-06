@@ -12,7 +12,12 @@ public class Payment {
         private Double amount;
         private String paymentMethod;
         private String status;
-        private int orderId;
+
+
+        @ManyToOne
+        @JoinColumn(name="orderId")
+        private Order order;
+
 
 
         // getters and setters

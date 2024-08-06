@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+
 
     private String email;
     private String firstName;

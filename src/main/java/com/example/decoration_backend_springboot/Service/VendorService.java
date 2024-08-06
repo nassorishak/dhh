@@ -1,4 +1,4 @@
-package com.example.decoration_backend_springboot.service;
+package com.example.decoration_backend_springboot.Service;
 import com.example.decoration_backend_springboot.Model.Vendor;
 import com.example.decoration_backend_springboot.Repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;

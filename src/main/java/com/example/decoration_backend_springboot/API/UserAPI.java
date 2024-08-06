@@ -89,6 +89,20 @@ public class UserAPI {
         }
     }
 
+    @GetMapping("/login/{email}")
+    public ResponseEntity<?> loginByEmail(@PathVariable String email){
+        try {
+            Optional<User> userOptional = userService.findByEmail(email);
+            if (userOptional.isPresent()){
+                return new ResponseEntity<>(userOptional,HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>("No user with Email "+email, HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception exception){
+            return new ResponseEntity<>("Opps",HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> createUserLogin(@RequestBody User user) {
         try {

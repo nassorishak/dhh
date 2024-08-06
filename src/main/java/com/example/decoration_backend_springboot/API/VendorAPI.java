@@ -1,6 +1,7 @@
 package com.example.decoration_backend_springboot.API;
 import com.example.decoration_backend_springboot.Model.Vendor;
-import com.example.decoration_backend_springboot.service.VendorService;
+//import com.example.decoration_backend_springboot.service.VendorService;
+import com.example.decoration_backend_springboot.Service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

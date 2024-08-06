@@ -12,7 +12,7 @@ public class Product {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int productId;
 
-        private String vendorId;
+//        private String vendorId;
 
         private String productName;
 
@@ -20,12 +20,12 @@ public class Product {
 
         private Double price;
 
-        private String image;
+        @Lob
+        @Column(length = 1000000)
+        private byte[] image;
 
         private String category;
 
-        @ManyToOne
-        @JoinColumn(name = "order_id")
-        private Order order;
+
 
 }

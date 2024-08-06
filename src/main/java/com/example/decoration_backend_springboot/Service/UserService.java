@@ -32,6 +32,7 @@ public class UserService {
         createUser.setPassword(passwordEncoder.encode(user.getPassword()));
         createUser.setFirstName(user.getFirstName());
         createUser.setLastName(user.getLastName());
+        createUser.setRole(user.getRole());
 
         return userRepository.save(createUser);
     }
@@ -47,6 +48,10 @@ public class UserService {
         return findByUsername(username);
 
 
+    }
+
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 
     public User authenticate(String email, String password) {
