@@ -32,4 +32,8 @@ public class VendorService {
     public void deleteById(int vendorId) {
         vendorRepository.deleteById(vendorId);
     }
+
+    public Long countAllOrders() {
+        return vendorRepository.count();
+    }
 }

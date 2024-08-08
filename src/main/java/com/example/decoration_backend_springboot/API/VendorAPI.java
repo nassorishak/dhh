@@ -83,4 +83,10 @@ public class VendorAPI {
             return new ResponseEntity<>("Failed to retrieve vendor", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countAllOrders() {
+        Long count = vendorService.countAllOrders();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 }

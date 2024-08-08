@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/product")
 public class ProductAPI {
     @Autowired
@@ -35,6 +35,13 @@ public class ProductAPI {
          return productService.save(product);
     }
 
+    @PostMapping("/api/product/add/product")
+    public ResponseEntity<String> addProduct(@RequestPart("product") Product product,
+                                             @RequestPart("file") MultipartFile file) {
+        // Process the product and file
+        return ResponseEntity.ok("Product added successfully!");
+    }
+
     @GetMapping("get/product")
 
     public  ResponseEntity<?> getProduct(){
@@ -51,7 +58,7 @@ public class ProductAPI {
         }
     }
 
-    @PutMapping("/update/{product_id}")
+    @PutMapping("/update/{productId}")
     public  ResponseEntity<?> updateProduct(@PathVariable int product_id ,@RequestBody Product product){
         try {
             if (productService.findById(product_id).isPresent()){
