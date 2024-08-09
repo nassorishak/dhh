@@ -29,5 +29,15 @@ public class OrderService {
     public Long countAllOrders() {
         return orderRepository.count();
     }
+
+
+
+    public List<Order> getOrdersByCustomerId(int userId) {
+        return orderRepository.findByCustomer_UserId(userId);
+
+    }
+
+
+
 }
 

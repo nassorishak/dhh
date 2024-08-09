@@ -59,20 +59,25 @@ public class ProductAPI {
     }
 
     @PutMapping("/update/{productId}")
-    public  ResponseEntity<?> updateProduct(@PathVariable int product_id ,@RequestBody Product product){
+    public ResponseEntity<?> updateProduct(@PathVariable int productId, @RequestBody Product product) {
         try {
-            if (productService.findById(product_id).isPresent()){
+            // Check if the product exists
+            if (productService.findById(productId).isPresent()) {
+                // Set the product ID to keep the same ID during the update
+                product.setProductId(productId); // Assuming your Product class has a setProductId method
 
-                Product product1 = productService.save(product);
+                // Save the updated product
+                Product updatedProduct = productService.save(product); // Save it and get the updated version
 
-                return  new ResponseEntity<>("product updated",HttpStatus.OK);
-
-
-            }else{
-                return new ResponseEntity<>("the product not updated",HttpStatus.BAD_REQUEST);
+                // Return a successful response along with the updated product
+                return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+            } else {
+                // Product not found
+                return new ResponseEntity<>("The product was not found", HttpStatus.NOT_FOUND);
             }
-        }catch (Exception e){
-            return  new ResponseEntity<>("product updated required",HttpStatus.BAD_GATEWAY);
+        } catch (Exception e) {
+            // Handle any unexpected exceptions
+            return new ResponseEntity<>("An error occurred while updating the product: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @DeleteMapping("delete/{product_id}")

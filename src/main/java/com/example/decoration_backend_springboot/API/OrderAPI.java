@@ -99,6 +99,15 @@ public class OrderAPI {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
+
+
+
+    @GetMapping("/customer/{userId}")
+    public List<Order> getOrdersByCustomerId(@PathVariable int userId) {
+        return orderService.getOrdersByCustomerId(userId);
+    }
+
+
 }
 
 

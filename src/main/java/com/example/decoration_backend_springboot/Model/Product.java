@@ -12,7 +12,7 @@ public class Product {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int productId;
 
-//        private String vendorId;
+
 
         private String productName;
 

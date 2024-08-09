@@ -88,5 +88,16 @@ public class PaymentAPI {
         }
 
     }
+    @GetMapping("/control-number")
+
+    public  ResponseEntity<String> generateControlNumber(){
+        Payment payment = new Payment();
+        payment.setPaymentMethod("atm");
+        payment.setAmount(20000D);
+        payment.setStatus("complete");
+        paymentService.save(payment);
+        return  new ResponseEntity<>(payment.getControlNumber(),HttpStatus.OK);
+
+    }
 }
 
