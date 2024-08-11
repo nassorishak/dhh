@@ -35,7 +35,7 @@ public class ProductAPI {
          return productService.save(product);
     }
 
-    @PostMapping("/api/product/add/product")
+    @PostMapping("/api/product")
     public ResponseEntity<String> addProduct(@RequestPart("product") Product product,
                                              @RequestPart("file") MultipartFile file) {
         // Process the product and file

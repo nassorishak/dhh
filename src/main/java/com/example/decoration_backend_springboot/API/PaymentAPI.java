@@ -99,5 +99,14 @@ public class PaymentAPI {
         return  new ResponseEntity<>(payment.getControlNumber(),HttpStatus.OK);
 
     }
+    @GetMapping("/control-number/{paymentId}")
+    public ResponseEntity<String> generateControlNumber(@PathVariable int paymentId) {
+        Payment payment = paymentService.findById(paymentId).orElseThrow();
+        Payment payment1 = new Payment();
+        payment.setPaymentMethod("atm");
+        payment.getAmount();
+        paymentService.save(payment);
+        return new ResponseEntity<>(payment.getControlNumber(), HttpStatus.OK);
+    }
 }
 

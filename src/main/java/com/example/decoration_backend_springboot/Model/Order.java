@@ -26,8 +26,9 @@ public class Order {
         private String size;
 
         @ManyToOne
-        @JoinColumn(name="customerID")
+        @JoinColumn(name="customerId")
         private Customer customer;
+
 
         @ManyToOne
         @JoinColumn(name = "productId")

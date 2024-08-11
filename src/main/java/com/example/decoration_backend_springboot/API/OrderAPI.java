@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("api/orders")
 public class OrderAPI {
@@ -32,15 +32,12 @@ public class OrderAPI {
 
     @PostMapping("/add/orders")
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
-
         try {
-            Order order1 = orderService.save(order);
-            return new ResponseEntity<>("The order was added successful", HttpStatus.OK);
+            Order savedOrder = orderService.save(order);
+            return new ResponseEntity<>("The order was added successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("the order was not added", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The order was not added", HttpStatus.BAD_REQUEST);
         }
-
-
     }
 
     @PutMapping("update/{order_id}")
