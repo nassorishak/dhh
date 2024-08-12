@@ -1,10 +1,17 @@
 package com.example.decoration_backend_springboot.API;
+import com.example.decoration_backend_springboot.Model.Order;
 import com.example.decoration_backend_springboot.Model.Payment;
+import com.example.decoration_backend_springboot.Model.PaymentRequest;
+import com.example.decoration_backend_springboot.Model.PaymentResponse;
+import com.example.decoration_backend_springboot.Repository.PaymentRepository;
+import com.example.decoration_backend_springboot.Service.OrderService;
 import com.example.decoration_backend_springboot.Service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 @RestController
@@ -13,6 +20,12 @@ import java.util.Optional;
 public class PaymentAPI {
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    PaymentRepository paymentRepository;
 
     @PostMapping("add/payments")
     public ResponseEntity<?> createPayment(@RequestBody Payment payment) {
@@ -88,25 +101,46 @@ public class PaymentAPI {
         }
 
     }
-    @GetMapping("/control-number")
+//    @GetMapping("/control-number")
+//
+//    public  ResponseEntity<String> generateControlNumber(){
+//        Payment payment = new Payment();
+//        payment.setPaymentMethod("atm");
+//        payment.setAmount(20000D);
+//        payment.setStatus("complete");
+//        paymentService.save(payment);
+//        return  new ResponseEntity<>(payment.getControlNumber(),HttpStatus.OK);
+//
+//    }
+    @GetMapping("/control-number/{orderId}")
+    public ResponseEntity<String> generateControlNumber(@PathVariable int orderId) {
+        Order order = orderService.findById(orderId).orElseThrow();
+//        Payment payment = paymentService.findById(paymentId).orElseThrow();
+        Payment payment1 = new Payment();
+        payment1.setOrder(order);
+        payment1.setPaymentMethod("atm");
+        payment1.setAmount(0);
+//        payment1.setStatus("complete");
+        paymentService.save(payment1);
+        return new ResponseEntity<>(payment1.getControlNumber(), HttpStatus.OK);
+    }
 
-    public  ResponseEntity<String> generateControlNumber(){
-        Payment payment = new Payment();
-        payment.setPaymentMethod("atm");
-        payment.setAmount(20000D);
+    @PostMapping("/payment/{controlNumber}")
+    public  ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber,@RequestBody PaymentRequest paymentRequest){
+        Payment payment = paymentRepository.findByControlNumber(controlNumber);
+        if (payment== null){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        }
+        payment.setAmount(paymentRequest.getAmount());
+        payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
         payment.setStatus("complete");
         paymentService.save(payment);
-        return  new ResponseEntity<>(payment.getControlNumber(),HttpStatus.OK);
+        PaymentResponse paymentResponse = new  PaymentResponse(payment);
+        return  new ResponseEntity<>(paymentResponse,HttpStatus.OK);
+    }
 
-    }
-    @GetMapping("/control-number/{paymentId}")
-    public ResponseEntity<String> generateControlNumber(@PathVariable int paymentId) {
-        Payment payment = paymentService.findById(paymentId).orElseThrow();
-        Payment payment1 = new Payment();
-        payment.setPaymentMethod("atm");
-        payment.getAmount();
-        paymentService.save(payment);
-        return new ResponseEntity<>(payment.getControlNumber(), HttpStatus.OK);
-    }
+
+
 }
 

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 @Entity
@@ -13,10 +14,10 @@ public class Payment {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int paymentId;
-        private Double amount;
+        private double amount;
         private String paymentMethod;
         private String status;
-
+        private Date PaymentDate;
         private  String controlNumber;
 
         @PrePersist
@@ -29,10 +30,7 @@ public class Payment {
                 }
         }
 
-
-
-
-        @ManyToOne
+        @OneToOne
         @JoinColumn(name="orderId")
         private Order order;
 
