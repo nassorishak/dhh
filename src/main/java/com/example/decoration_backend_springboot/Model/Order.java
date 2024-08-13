@@ -14,8 +14,6 @@ public class Order {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int orderId;
 
-        private Double totalAmount;
-
         @Temporal(TemporalType.DATE)
         private Date date;
 
@@ -24,6 +22,7 @@ public class Order {
         private  String quantity;
 
         private String size;
+        private  String orderName;
 
         @ManyToOne
         @JoinColumn(name="customerId")
