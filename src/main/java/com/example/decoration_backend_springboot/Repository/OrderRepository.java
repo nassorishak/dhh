@@ -9,4 +9,11 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Integer> {
     List<Order> findByCustomer_UserId(int userId);
+
+    // Custom method to find an order by its orderId
+    Order findByOrderId(int orderId);
+
+
+    // Custom method to delete an order by its orderId
+    void deleteByOrderId(int orderId);
 }

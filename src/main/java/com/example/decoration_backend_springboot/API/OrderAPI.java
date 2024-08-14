@@ -105,6 +105,25 @@ public class OrderAPI {
     }
 
 
+
+
+    @PatchMapping("/cancel/{orderId}")
+    public ResponseEntity<String> cancelOrder(@PathVariable int orderId) {
+        String result = orderService.cancelOrder(orderId);
+        return ResponseEntity.ok(result);
+    }
+
+
+    // Endpoint to approve an order
+    @PatchMapping("/approve/{orderId}")
+    public ResponseEntity<String> approveOrder(@PathVariable int orderId) {
+        String result = orderService.approveOrder(orderId);
+        return ResponseEntity.ok(result);
+    }
+
+
+
+
 }
 
 

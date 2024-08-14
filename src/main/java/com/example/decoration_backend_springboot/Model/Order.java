@@ -21,6 +21,7 @@ public class Order {
 
         private  String quantity;
 
+        private  String orderType;
         private String size;
         private  String orderName;
 

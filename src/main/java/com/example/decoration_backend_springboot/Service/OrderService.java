@@ -37,6 +37,54 @@ public class OrderService {
 
     }
 
+    public String cancelOrder(int orderId) {
+        // Find the order by ID
+        Order order = orderRepository.findById(orderId).orElse(null);
+
+        if (order == null) {
+            return "Order not found";
+        }
+
+        // Update the status to "canceled"
+        order.setStatus("canceled");
+        orderRepository.save(order);
+        return "Order status updated to canceled";
+    }
+
+//    public String approveOrder(int orderId) {
+//        // Find the order by ID
+//        Order order = orderRepository.findById(orderId).orElse(null);
+//
+//        if (order == null) {
+//            return "Order not found";
+//        }
+//
+//        // Update the status to "approved"
+//        order.setStatus("approved");
+//        orderRepository.save(order);
+//        return "Order status updated to approved";
+//    }
+
+    // Method to approve an order
+    public String approveOrder(int orderId) {
+        Order order = orderRepository.findByOrderId(orderId);
+        if (order != null) {
+            if (!"approved".equals(order.getStatus())) { // Check if it's not already approved
+                order.setStatus("approved"); // Set status to "approved"
+                orderRepository.save(order); // Save the updated order
+                return "Order approved successfully";
+            } else {
+                return "Order is already approved";
+            }
+        } else {
+            return "Order not found";
+        }
+    }
+
+
+
+
+
 
 
 }
