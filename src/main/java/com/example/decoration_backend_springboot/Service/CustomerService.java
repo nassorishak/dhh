@@ -28,5 +28,10 @@ public class CustomerService {
     public void deleteById(int customer_id) {
         customerRepository.deleteById(customer_id);
     }
+
+    public Customer findCustomerByIdentifier(String identifier) {
+        // For instance, here we assume the identifier is the customer's email
+        return customerRepository.findByEmail(identifier);
+    }
 }
 

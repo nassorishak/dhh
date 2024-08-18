@@ -1,6 +1,5 @@
 package com.example.decoration_backend_springboot.API;
 import com.example.decoration_backend_springboot.Model.Vendor;
-//import com.example.decoration_backend_springboot.service.VendorService;
 import com.example.decoration_backend_springboot.Service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/vendor")
 public class VendorAPI {
 
+    @Autowired
     private final VendorService vendorService;
 
-    @Autowired
     public VendorAPI(VendorService vendorService) {
         this.vendorService = vendorService;
     }
@@ -89,4 +88,6 @@ public class VendorAPI {
         Long count = vendorService.countAllOrders();
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
+
+
 }

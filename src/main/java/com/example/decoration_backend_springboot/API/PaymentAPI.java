@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("api/payments")
 public class PaymentAPI {
     @Autowired
