@@ -24,6 +24,7 @@ public class ProductAPI {
             @RequestParam("productName") String productName,
             @RequestParam("productDescription") String productDescription,
             @RequestParam("price") Double price,
+            @RequestParam("productCompany") String productCampany,
             @RequestParam("category") String category,
             @RequestParam("image") MultipartFile image) throws IOException{
         Product product = new Product();
@@ -32,6 +33,7 @@ public class ProductAPI {
          product.setImage(image.getBytes());
          product.setCategory(category);
          product.setPrice(price);
+         product.setProductCompany(productCampany);
          return productService.save(product);
     }
 
@@ -111,6 +113,14 @@ public class ProductAPI {
         }
 
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(
+            @RequestParam(value = "query", required = false) String query) {
+        List<Product> products = productService.searchProducts(query);
+        return ResponseEntity.ok(products);
+    }
+
 }
 
 

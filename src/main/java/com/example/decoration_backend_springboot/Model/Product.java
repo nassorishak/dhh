@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class Product {
 
+
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int productId;
@@ -17,12 +18,15 @@ public class Product {
         private String productDescription;
 
         private Double price;
+        private  String productCompany;
 
         @Lob
         @Column(length = 1000000)
         private byte[] image;
 
         private String category;
+
+
 
 
 

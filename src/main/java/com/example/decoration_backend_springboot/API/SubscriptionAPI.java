@@ -4,12 +4,14 @@ import com.example.decoration_backend_springboot.Model.Subscription;
 import com.example.decoration_backend_springboot.Model.Vendor;
 import com.example.decoration_backend_springboot.Repository.SubscriptionRepository;
 import com.example.decoration_backend_springboot.Repository.VendorRepository;
+import com.example.decoration_backend_springboot.Service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 //package com.example.decoration_backend_springboot.API;
 //
@@ -82,4 +84,22 @@ public class SubscriptionAPI {
         return ResponseEntity.ok("Total amount: " + totalAmount);
     }
 
+    @GetMapping("/get/subscriptions")
+    public List<Subscription> getAllSubscriptions() {
+        return subscriptionRepository.findAll();
+    }
+
+    @DeleteMapping("/delete/{subId}")
+    public ResponseEntity<String> deleteSubscription(@PathVariable("subId") int subId) {
+        if (subscriptionRepository.existsById(subId)) {
+            subscriptionRepository.deleteById(subId);
+            return ResponseEntity.ok("Subscription deleted successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Subscription not found.");
+        }
+    }
+
 }
+
+
+

@@ -16,8 +16,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Optional<Product> findById(int product_id) {
-        return productRepository.findById(product_id);
+    public Optional<Product> findById(int productId) {
+        return productRepository.findById(productId);
     }
 
     public List<Product> findAll() {
@@ -25,7 +25,17 @@ public class ProductService {
     }
 
 
-    public void deleteById(int product_id) {
-        productRepository.deleteById(product_id);
+    public void deleteById(int productId) {
+        productRepository.deleteById(productId);
     }
+
+    public List<Product> searchProducts(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return productRepository.findAll();
+        }
+        return productRepository.findByProductNameContainingIgnoreCaseOrProductCompanyContainingIgnoreCase(query, query);
+    }
+
+
+
 }

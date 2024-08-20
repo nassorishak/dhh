@@ -18,6 +18,7 @@ public class Subscription {
     private String serviceType;
     private String serviceName;
     private String amount;
+    private String company;
 
     // Assuming you have a vendorId field
     private int vendorId; // Add this if it matches your repository query

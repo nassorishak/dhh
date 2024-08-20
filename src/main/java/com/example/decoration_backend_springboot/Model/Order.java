@@ -3,6 +3,7 @@ package com.example.decoration_backend_springboot.Model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -23,14 +24,17 @@ public class Order {
 
         private  String orderType;
         private String size;
-        private  String orderName;
-
         @ManyToOne
         @JoinColumn(name="customerId")
         private Customer customer;
 
-
         @ManyToOne
         @JoinColumn(name = "productId")
         private Product product;
+
+
+
+
+
+
 }

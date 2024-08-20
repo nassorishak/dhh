@@ -30,21 +30,24 @@ public class OrderAPI {
 
     }
 
-    @PostMapping("/add/orders")
-    public ResponseEntity<?> createOrder(@RequestBody Order order) {
-        try {
-            Order savedOrder = orderService.save(order);
-            return new ResponseEntity<>("The order was added successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("The order was not added", HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/add/orders")
+//    public ResponseEntity<?> createOrder(@RequestBody Order order) {
+//        try {
+//            Order savedOrder = orderService.save(order);
+//            return new ResponseEntity<>("The order was added successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("The order was not added", HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+
+
 
     @PutMapping("update/{order_id}")
-    public ResponseEntity<?> updateOrder(@PathVariable int order_id, @RequestBody Order order) {
+    public ResponseEntity<?> updateOrder(@PathVariable int orderId, @RequestBody Order order) {
 
         try {
-            if (orderService.findById(order_id).isPresent()) {
+            if (orderService.findById(orderId).isPresent()) {
                 Order order1 = orderService.save(order);
                 return new ResponseEntity<>("The was successful updated",HttpStatus.OK);
             }
@@ -62,20 +65,20 @@ public class OrderAPI {
 
 
     }
-    @DeleteMapping("delete/{order_id}")
-    public  ResponseEntity<?> deleteOrder(@PathVariable int order_id){
+    @DeleteMapping("delete/{orderId}")
+    public  ResponseEntity<?> deleteOrder(@PathVariable int orderId){
         try {
-            orderService.deleteById(order_id);
+            orderService.deleteById(orderId);
             return  new ResponseEntity<>("The order was successful deleted",HttpStatus.OK);
         }catch (Exception e){
             return  new ResponseEntity<>("The order was not deleted",HttpStatus.BAD_REQUEST);
         }
 
     }
-    @GetMapping("getById/{order_id}")
-    public  ResponseEntity<?> getOrderById(@PathVariable int order_id){
+    @GetMapping("getById/{orderId}")
+    public  ResponseEntity<?> getOrderById(@PathVariable int orderId){
         try {
-            Optional<Order> OptionalOrder = orderService.findById(order_id);
+            Optional<Order> OptionalOrder = orderService.findById(orderId);
             if (OptionalOrder.isPresent()){
                 return  new ResponseEntity<>("The order was successful deleted",HttpStatus.OK);
 
@@ -125,5 +128,7 @@ public class OrderAPI {
 
 
 }
+
+
 
 

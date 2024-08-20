@@ -1,5 +1,7 @@
 package com.example.decoration_backend_springboot.Service;
+import com.example.decoration_backend_springboot.Model.Product;
 import com.example.decoration_backend_springboot.Model.Vendor;
+import com.example.decoration_backend_springboot.Repository.ProductRepository;
 import com.example.decoration_backend_springboot.Repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,10 +11,9 @@ import java.util.Optional;
 
 @Service
 public class VendorService {
-
+    @Autowired
     private final VendorRepository vendorRepository;
 
-    @Autowired
     public VendorService(VendorRepository vendorRepository) {
         this.vendorRepository = vendorRepository;
     }
@@ -36,4 +37,27 @@ public class VendorService {
     public Long countAllOrders() {
         return vendorRepository.count();
     }
+
+    public boolean blockVendor(int vendorId) {
+        Optional<Vendor> vendorOptional = vendorRepository.findById(vendorId);
+        if (vendorOptional.isPresent()) {
+            Vendor vendor = vendorOptional.get();
+            vendor.setBlocked(true);
+            vendorRepository.save(vendor);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unblockVendor(int vendorId) {
+        Optional<Vendor> vendorOptional = vendorRepository.findById(vendorId);
+        if (vendorOptional.isPresent()) {
+            Vendor vendor = vendorOptional.get();
+            vendor.setBlocked(false);
+            vendorRepository.save(vendor);
+            return true;
+        }
+        return false;
+    }
+
 }

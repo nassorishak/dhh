@@ -13,6 +13,18 @@ public class Vendor extends User{
     private  String address;
     private String vendorCompany;
 
+    private boolean blocked; // Kipengele kinachoweka status ya vendor kama amezuiwa au la
+
+    // Getters na Setters
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
 
 
 

@@ -89,5 +89,26 @@ public class VendorAPI {
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
+    @PutMapping("/block/{vendorId}")
+    public ResponseEntity<String> blockVendor(@PathVariable int vendorId) {
+        boolean isBlocked = vendorService.blockVendor(vendorId);
+        if (isBlocked) {
+            return ResponseEntity.ok("Vendor blocked successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendor not found.");
+        }
+    }
+
+    @PutMapping("/unblock/{vendorId}")
+    public ResponseEntity<String> unblockVendor(@PathVariable int vendorId) {
+        boolean isUnblocked = vendorService.unblockVendor(vendorId);
+        if (isUnblocked) {
+            return ResponseEntity.ok("Vendor unblocked successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendor not found.");
+        }
+    }
+
+
 
 }
