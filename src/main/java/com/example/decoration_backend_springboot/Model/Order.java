@@ -19,7 +19,7 @@ public class Order {
         private Date date;
 
         private String status;
-
+        private  String controlNumber;
         private  String quantity;
 
         private  String orderType;

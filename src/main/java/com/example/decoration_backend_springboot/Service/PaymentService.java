@@ -11,6 +11,10 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    public PaymentService(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
     public Payment savePayment(Payment payment) {
         return paymentRepository.save(payment);
     }
@@ -23,12 +27,12 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public void deleteById(int payment_id) {
-        paymentRepository.deleteById(payment_id);
+    public void deleteById(int paymentId) {
+        paymentRepository.deleteById(paymentId);
     }
 
-    public Optional<Payment> findById(int payment_id) {
-        return  paymentRepository.findById(payment_id);
+    public Optional<Payment> findById(int paymentId) {
+        return  paymentRepository.findById(paymentId);
     }
 }
 

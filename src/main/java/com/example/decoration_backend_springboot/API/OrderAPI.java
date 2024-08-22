@@ -30,15 +30,15 @@ public class OrderAPI {
 
     }
 
-//    @PostMapping("/add/orders")
-//    public ResponseEntity<?> createOrder(@RequestBody Order order) {
-//        try {
-//            Order savedOrder = orderService.save(order);
-//            return new ResponseEntity<>("The order was added successfully", HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("The order was not added", HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @PostMapping("/add/orders")
+    public ResponseEntity<?> createOrder(@RequestBody Order order) {
+        try {
+            Order savedOrder = orderService.save(order);
+            return new ResponseEntity<>("The order was added successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("The order was not added", HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 

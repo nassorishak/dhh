@@ -53,6 +53,9 @@ public class PaymentAPI {
         }
     }
 
+
+
+
     @PutMapping("/update/{payment_id}")
     public  ResponseEntity<?> updatePayment(@PathVariable int payment_id ,@RequestBody Payment payment){
         try {
@@ -125,20 +128,35 @@ public class PaymentAPI {
         return new ResponseEntity<>(payment1.getControlNumber(), HttpStatus.OK);
     }
 
-    @PostMapping("/payment/{controlNumber}")
-    public  ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber,@RequestBody PaymentRequest paymentRequest){
-        Payment payment = paymentRepository.findByControlNumber(controlNumber);
-        if (payment== null){
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        }
-        payment.setAmount(paymentRequest.getAmount());
-        payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
-        payment.setStatus("complete");
-        paymentService.save(payment);
-        PaymentResponse paymentResponse = new  PaymentResponse(payment);
-        return  new ResponseEntity<>(paymentResponse,HttpStatus.OK);
+//    @PostMapping("/payment/{controlNumber}")
+//    public  ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber,@RequestBody PaymentRequest paymentRequest){
+//        Payment payment = paymentRepository.findByControlNumber(controlNumber);
+//        if (payment== null){
+//            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//
+//        }
+//        payment.setAmount(paymentRequest.getAmount());
+//        payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+//        payment.setStatus("complete");
+//        paymentService.save(payment);
+//        PaymentResponse paymentResponse = new  PaymentResponse(payment);
+//        return  new ResponseEntity<>(paymentResponse,HttpStatus.OK);
+//    }
+@PostMapping("/payment/{controlNumber}")
+public ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber, @RequestBody PaymentRequest paymentRequest) {
+    Payment payment = paymentRepository.findByControlNumber(controlNumber);
+    if (payment == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    // Set the payment date and amount
+    payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+    payment.setAmount(paymentRequest.getAmount());
+    payment.setStatus("complete");
+    paymentService.save(payment);
+    PaymentResponse paymentResponse = new PaymentResponse(payment);
+    return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+}
 
 
 

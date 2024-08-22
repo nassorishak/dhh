@@ -105,9 +105,11 @@ public class VendorAPI {
         if (isUnblocked) {
             return ResponseEntity.ok("Vendor unblocked successfully.");
         } else {
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendor not found.");
         }
     }
+
 
 
 

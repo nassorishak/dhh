@@ -38,26 +38,70 @@ public class VendorService {
         return vendorRepository.count();
     }
 
+//
+//    public boolean blockVendor(int vendorId) {
+//        Optional<Vendor> vendor = vendorRepository.findById(vendorId);
+//        if (vendor.isPresent()) {
+//            vendor.get().setBlocked(true); // Assuming you have a method to set blocked status
+//            vendorRepository.save(vendor.get());
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public boolean unblockVendor(int vendorId) {
+//        Optional<Vendor> vendor = vendorRepository.findById(vendorId);
+//        if (vendor.isPresent()) {
+//            vendor.get().setBlocked(false); // Assuming you have a method to set blocked status
+//            vendorRepository.save(vendor.get());
+//            return true;
+//        }
+//        return false;
+//    }
+//public boolean isVendorBlocked(int vendorId) {
+//    Optional<Vendor> vendor = vendorRepository.findById(vendorId);
+//    return vendor.map(Vendor::isBlocked).orElse(false); // Assuming isBlocked returns true if blocked
+//}
+//
+//    public boolean blockVendor(int vendorId) {
+//        Optional<Vendor> vendor = vendorRepository.findById(vendorId);
+//        if (vendor.isPresent()) {
+//            vendor.get().setBlocked(true); // Assuming you have a method to set blocked status
+//            vendorRepository.save(vendor.get());
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public boolean unblockVendor(int vendorId) {
+//        Optional<Vendor> vendor = vendorRepository.findById(vendorId);
+//        if (vendor.isPresent()) {
+//            vendor.get().setBlocked(false); // Assuming you have a method to set blocked status
+//            vendorRepository.save(vendor.get());
+//            return true;
+//        }
+//        return false;
+//    }
+
     public boolean blockVendor(int vendorId) {
-        Optional<Vendor> vendorOptional = vendorRepository.findById(vendorId);
-        if (vendorOptional.isPresent()) {
-            Vendor vendor = vendorOptional.get();
-            vendor.setBlocked(true);
-            vendorRepository.save(vendor);
+        Optional<Vendor> optionalVendor = findById(vendorId);
+        if (optionalVendor.isPresent()) {
+            Vendor vendor = optionalVendor.get();
+            vendor.setIsBlocked(true);
+            save(vendor);
             return true;
         }
         return false;
     }
 
     public boolean unblockVendor(int vendorId) {
-        Optional<Vendor> vendorOptional = vendorRepository.findById(vendorId);
-        if (vendorOptional.isPresent()) {
-            Vendor vendor = vendorOptional.get();
-            vendor.setBlocked(false);
-            vendorRepository.save(vendor);
+        Optional<Vendor> optionalVendor = findById(vendorId);
+        if (optionalVendor.isPresent()) {
+            Vendor vendor = optionalVendor.get();
+            vendor.setIsBlocked(false);
+            save(vendor);
             return true;
         }
         return false;
     }
-
 }

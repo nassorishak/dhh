@@ -17,6 +17,7 @@ public class Vendor extends User{
 
     // Getters na Setters
 
+
     public boolean isBlocked() {
         return blocked;
     }
@@ -26,6 +27,6 @@ public class Vendor extends User{
     }
 
 
-
-
+    public void setIsBlocked(boolean b) {
+    }
 }

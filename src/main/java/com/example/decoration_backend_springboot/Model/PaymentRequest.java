@@ -14,4 +14,8 @@ public class PaymentRequest {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    public String getPaymentMethod() {
+        return getPaymentMethod();
+    }
 }
