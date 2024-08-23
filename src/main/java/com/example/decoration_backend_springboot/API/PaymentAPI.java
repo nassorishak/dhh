@@ -3,6 +3,7 @@ import com.example.decoration_backend_springboot.Model.Order;
 import com.example.decoration_backend_springboot.Model.Payment;
 import com.example.decoration_backend_springboot.Model.PaymentRequest;
 import com.example.decoration_backend_springboot.Model.PaymentResponse;
+import com.example.decoration_backend_springboot.Repository.OrderRepository;
 import com.example.decoration_backend_springboot.Repository.PaymentRepository;
 import com.example.decoration_backend_springboot.Service.OrderService;
 import com.example.decoration_backend_springboot.Service.PaymentService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @RestController
@@ -24,6 +26,8 @@ public class PaymentAPI {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderRepository orderRepository;
     @Autowired
     PaymentRepository paymentRepository;
 
@@ -128,37 +132,94 @@ public class PaymentAPI {
         return new ResponseEntity<>(payment1.getControlNumber(), HttpStatus.OK);
     }
 
+//    @Autowired
+//    private PaymentService paymentService;
+
+
 //    @PostMapping("/payment/{controlNumber}")
-//    public  ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber,@RequestBody PaymentRequest paymentRequest){
-//        Payment payment = paymentRepository.findByControlNumber(controlNumber);
-//        if (payment== null){
-//            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    public ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber, @RequestBody PaymentRequest paymentRequest) {
+//        // Fetch the order by control number
+//        Order order = orderRepository.findByControlNumber(controlNumber);
 //
+//        if (order == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        }
+//
+//        // Update the payment details for the order
+//        Payment payment = new Payment(); // Assuming you have a Payment entity and it's correctly set up
 //        payment.setAmount(paymentRequest.getAmount());
 //        payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
 //        payment.setStatus("complete");
+//        payment.setPaymentMethod("BANK");
+//
+//
+//        // Save the payment (you may need to associate it with the order, if applicable)
 //        paymentService.save(payment);
-//        PaymentResponse paymentResponse = new  PaymentResponse(payment);
-//        return  new ResponseEntity<>(paymentResponse,HttpStatus.OK);
-//    }
-@PostMapping("/payment/{controlNumber}")
-public ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber, @RequestBody PaymentRequest paymentRequest) {
-    Payment payment = paymentRepository.findByControlNumber(controlNumber);
-    if (payment == null) {
+//
+//        // Create and return the payment response
+//        PaymentResponse paymentResponse = new PaymentResponse(payment);
+//        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+//    }hii hapo juu
+@PostMapping("/orders/{orderId}/payment/{controlNumber}")
+public ResponseEntity<PaymentResponse> payAmount(@PathVariable Long orderId,
+                                                 @PathVariable String controlNumber,
+                                                 @RequestBody PaymentRequest paymentRequest) {
+    // Validate the payment request
+    if (paymentRequest.getAmount() <= 0) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    // Fetch the order by orderId and control number
+    Order order = orderRepository.findByOrderIdAndControlNumber(Math.toIntExact(orderId), controlNumber);
+
+    if (order == null) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Set the payment date and amount
-    payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+    // Optional: Check if there’s already a payment done for this order
+    if ("complete".equals(order.getPaymentStatus())) {
+        return new ResponseEntity<>(HttpStatus.CONFLICT); // Payment already completed
+    }
+
+    // Create and configure the payment entity
+    Payment payment = new Payment();
     payment.setAmount(paymentRequest.getAmount());
-    payment.setStatus("complete");
-    paymentService.save(payment);
+    payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+    payment.setStatus("Paid");
+    payment.setPaymentMethod("BANK");
+    payment.setOrderId(order.getOrderId());
+    payment.setOrder(order);
+
+    try {
+        // Save the payment
+        paymentService.save(payment);
+    } catch (Exception e) {
+        // Log the exception (not shown here, but you should log it)
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Create and return the payment response
     PaymentResponse paymentResponse = new PaymentResponse(payment);
     return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
 }
 
+//@PostMapping("/payment/{controlNumber}")
+//public ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber, @RequestBody PaymentRequest paymentRequest) {
+//    Payment payment = paymentRepository.findByControlNumber(controlNumber);
+//    if (payment == null) {
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//
+//    // Set the payment date and amount
+//    payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+//    payment.setAmount(paymentRequest.getAmount());
+//    payment.setStatus("complete");
+//    paymentService.save(payment);
+//    PaymentResponse paymentResponse = new PaymentResponse(payment);
+//    return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+//}
 
 
-}
+    }
+
 

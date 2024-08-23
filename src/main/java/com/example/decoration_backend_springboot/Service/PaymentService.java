@@ -1,5 +1,7 @@
 package com.example.decoration_backend_springboot.Service;
+import com.example.decoration_backend_springboot.Model.Order;
 import com.example.decoration_backend_springboot.Model.Payment;
+import com.example.decoration_backend_springboot.Repository.OrderRepository;
 import com.example.decoration_backend_springboot.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,12 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     public PaymentService(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
+
     }
 
     public Payment savePayment(Payment payment) {
@@ -34,5 +40,14 @@ public class PaymentService {
     public Optional<Payment> findById(int paymentId) {
         return  paymentRepository.findById(paymentId);
     }
+
+
+
 }
+
+
+
+
+
+
 

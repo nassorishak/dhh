@@ -7,13 +7,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order,Integer> {
+public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByCustomer_UserId(int userId);
 
-    // Custom method to find an order by its orderId
+    // Find order by orderId
     Order findByOrderId(int orderId);
 
-
-    // Custom method to delete an order by its orderId
+    // Delete order by orderId
     void deleteByOrderId(int orderId);
+
+    // Custom method to find an order by orderId and controlNumber
+    Order findByOrderIdAndControlNumber(int orderId, String controlNumber);
+
 }

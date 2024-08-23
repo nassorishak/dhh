@@ -3,6 +3,7 @@ package com.example.decoration_backend_springboot.Model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -33,8 +34,15 @@ public class Order {
         private Product product;
 
 
+        public String getControlNumber() {
+                return controlNumber;
+        }
 
+        public void setControlNumber(String controlNumber) {
+                this.controlNumber = controlNumber;
+        }
 
-
-
+        public String getPaymentStatus() {
+                return null;
+        }
 }

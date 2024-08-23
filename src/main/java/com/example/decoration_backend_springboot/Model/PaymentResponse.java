@@ -34,6 +34,9 @@ public class PaymentResponse {
 
     }
 
+    public PaymentResponse(int paymentId, String controlNumber, double amount, String paymentMethod, String status, Date paymentDate) {
+    }
+
     public int getPaymentId() {
         return paymentId;
     }
