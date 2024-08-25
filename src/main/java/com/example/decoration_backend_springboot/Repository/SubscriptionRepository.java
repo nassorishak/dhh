@@ -9,6 +9,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Inte
     // Change this method if `vendorId` is not defined in the `Subscription` entity
     Subscription findByVendorId(int vendorId);
 
-    List<Subscription> findByVendor_User_UserId(int userId);
+//    List<Subscription> findByVendor_User_UserId(int userId);
 
 }

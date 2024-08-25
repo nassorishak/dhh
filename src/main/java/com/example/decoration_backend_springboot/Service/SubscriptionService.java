@@ -60,7 +60,7 @@ public class SubscriptionService {
         return  subscriptionRepository.findByVendorId(vendorId);
     }
 
-    public List<Subscription> getSubscriptionsByUserId(int userId) {
-        return subscriptionRepository.findByVendor_User_UserId(userId); // Adjust according to your mapping
-    }
+//    public List<Subscription> getSubscriptionsByUserId(int userId) {
+//        return subscriptionRepository.findByVendor_User_UserId(userId); // Adjust according to your mapping
+//    }
 }

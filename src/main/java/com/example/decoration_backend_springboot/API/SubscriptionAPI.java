@@ -98,13 +98,13 @@ public class SubscriptionAPI {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Subscription not found.");
         }
     }
-    @GetMapping("/user/{userId}")
-    public List<Subscription> getSubscriptionsByUserId(@PathVariable int userId) {
-        SubscriptionService subscriptionService = null;
-        return subscriptionService.getSubscriptionsByUserId(userId);
+//    @GetMapping("/user/{userId}")
+//    public List<Subscription> getSubscriptionsByUserId(@PathVariable int userId) {
+//        SubscriptionService subscriptionService = null;
+//        return subscriptionService.getSubscriptionsByUserId(userId);
     }
 
-}
+
 
 
 
