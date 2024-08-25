@@ -82,10 +82,8 @@ public class OrderService {
     }
 
 
-
-
-
-
-
+    public Order payOrder(int orderId) {
+        return null;
+    }
 }
 

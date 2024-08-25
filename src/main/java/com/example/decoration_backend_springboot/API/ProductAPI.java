@@ -1,5 +1,6 @@
 package com.example.decoration_backend_springboot.API;
 import com.example.decoration_backend_springboot.Model.Product;
+import com.example.decoration_backend_springboot.Model.dto.ProductDTO;
 import com.example.decoration_backend_springboot.Service.PaymentService;
 import com.example.decoration_backend_springboot.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

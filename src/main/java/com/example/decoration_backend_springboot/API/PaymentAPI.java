@@ -202,6 +202,54 @@ public ResponseEntity<PaymentResponse> payAmount(@PathVariable Long orderId,
     PaymentResponse paymentResponse = new PaymentResponse(payment);
     return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
 }
+//---------------------------above
+
+//    @PostMapping("/orders/{orderId}/payment/{controlNumber}")
+//    public ResponseEntity<PaymentResponse> payAmount(@PathVariable Long orderId,
+//                                                     @PathVariable String controlNumber,
+//                                                     @RequestBody PaymentRequest paymentRequest) {
+//        // Validate the payment request
+//        if (paymentRequest.getAmount() <= 0) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//
+//        // Fetch the order by orderId and control number
+//        Order order = orderRepository.findByOrderIdAndControlNumber(Math.toIntExact(orderId), controlNumber);
+//
+//        if (order == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        // Optional: Check if there’s already a payment done for this order
+//        if ("complete".equals(order.getPaymentStatus())) {
+//            return new ResponseEntity<>(HttpStatus.CONFLICT); // Payment already completed
+//        }
+//
+//        // Create and configure the payment entity
+//        Payment payment = new Payment();
+//        payment.setAmount(paymentRequest.getAmount());
+//        payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+//        payment.setStatus("Paid");
+//        payment.setPaymentMethod("BANK");
+//        payment.setOrderId(order.getOrderId());
+//        payment.setOrder(order);
+//
+//        try {
+//            // Save the payment
+//            paymentService.save(payment);
+//
+//            // Update the order status to "Paid"
+//            order.setPaymentStatus("Paid");
+//            orderRepository.save(order);
+//        } catch (Exception e) {
+//            // Log the exception (not shown here, but you should log it)
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        // Create and return the payment response
+//        PaymentResponse paymentResponse = new PaymentResponse(payment);
+//        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+//    }
 
 //@PostMapping("/payment/{controlNumber}")
 //public ResponseEntity<PaymentResponse> payAmount(@PathVariable String controlNumber, @RequestBody PaymentRequest paymentRequest) {

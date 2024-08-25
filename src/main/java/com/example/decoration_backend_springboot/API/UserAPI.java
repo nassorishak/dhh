@@ -5,6 +5,8 @@ import com.example.decoration_backend_springboot.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +20,13 @@ public class UserAPI {
     @Autowired
     private UserService userService;
 
+    @Autowired
+     private PasswordEncoder passwordEncoder;
+
     @PostMapping("/add/users")
     public ResponseEntity<String> createUser(@RequestBody User user) {
         try {
+
             User userNew = new User();
             userNew.setRole(user.getRole());
             userNew.setPassword(user.getPassword());

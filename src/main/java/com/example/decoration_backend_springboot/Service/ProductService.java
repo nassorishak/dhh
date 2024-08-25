@@ -1,5 +1,6 @@
 package com.example.decoration_backend_springboot.Service;
 import com.example.decoration_backend_springboot.Model.Product;
+import com.example.decoration_backend_springboot.Model.dto.ProductDTO;
 import com.example.decoration_backend_springboot.Repository.PaymentRepository;
 import com.example.decoration_backend_springboot.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,6 @@ public class ProductService {
         }
         return productRepository.findByProductNameContainingIgnoreCaseOrProductCompanyContainingIgnoreCase(query, query);
     }
-
 
 
 }

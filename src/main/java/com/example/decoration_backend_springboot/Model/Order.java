@@ -45,4 +45,7 @@ public class Order {
         public String getPaymentStatus() {
                 return null;
         }
+
+        public void setPaymentStatus(String Paid) {
+        }
 }

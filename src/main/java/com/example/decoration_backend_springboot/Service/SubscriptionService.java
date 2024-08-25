@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service
 public class SubscriptionService {
@@ -57,5 +58,9 @@ public class SubscriptionService {
 
     public Subscription findByVendorId(int vendorId) {
         return  subscriptionRepository.findByVendorId(vendorId);
+    }
+
+    public List<Subscription> getSubscriptionsByUserId(int userId) {
+        return subscriptionRepository.findByVendor_User_UserId(userId); // Adjust according to your mapping
     }
 }
