@@ -204,15 +204,17 @@ public class OrderAPI {
 
     }
     @DeleteMapping("delete/{orderId}")
-    public  ResponseEntity<?> deleteOrder(@PathVariable int orderId){
+    public ResponseEntity<?> deleteOrder(@PathVariable int orderId) {
         try {
             orderService.deleteById(orderId);
-            return  new ResponseEntity<>("The order was successful deleted",HttpStatus.OK);
-        }catch (Exception e){
-            return  new ResponseEntity<>("The order was not deleted",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The order was successfully deleted", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("The order was not deleted", HttpStatus.BAD_REQUEST);
         }
-
     }
+
+
+
     @GetMapping("getById/{orderId}")
     public  ResponseEntity<?> getOrderById(@PathVariable int orderId){
         try {

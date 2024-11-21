@@ -63,4 +63,17 @@ public class SubscriptionService {
 //    public List<Subscription> getSubscriptionsByUserId(int userId) {
 //        return subscriptionRepository.findByVendor_User_UserId(userId); // Adjust according to your mapping
 //    }
+
+    public Subscription updateSubscription(Subscription subscription) {
+        // Validate the dates
+        if (subscription.getStartDate() == null || subscription.getEndDate() == null) {
+            throw new IllegalArgumentException("Start date and end date must not be null.");
+        }
+        if (subscription.getStartDate().isAfter(subscription.getEndDate())) {
+            throw new IllegalArgumentException("Start date must be before end date.");
+        }
+
+        // Save to the repository
+        return subscriptionRepository.save(subscription);
+    }
 }

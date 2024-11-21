@@ -98,10 +98,26 @@ public class SubscriptionAPI {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Subscription not found.");
         }
     }
-//    @GetMapping("/user/{userId}")
-//    public List<Subscription> getSubscriptionsByUserId(@PathVariable int userId) {
-//        SubscriptionService subscriptionService = null;
-//        return subscriptionService.getSubscriptionsByUserId(userId);
+    @PutMapping("/update/{subId}")
+    public ResponseEntity<Subscription> updateSubscription(@PathVariable("subId") int subId, @RequestBody Subscription subscription) {
+        Subscription existingSubscription = subscriptionRepository.findById(subId).orElse(null);
+        if (existingSubscription == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        existingSubscription.setSubscriptionType(subscription.getSubscriptionType());
+        existingSubscription.setStartDate(subscription.getStartDate());
+        existingSubscription.setEndDate(subscription.getEndDate());
+        existingSubscription.setServiceType(subscription.getServiceType());
+        existingSubscription.setServiceName(subscription.getServiceName());
+        existingSubscription.setAmount(subscription.getAmount());
+        existingSubscription.setCompany(subscription.getCompany());
+        existingSubscription.setVendorId(subscription.getVendorId());
+
+        SubscriptionService subscriptionService = new SubscriptionService();
+        Subscription updatedSubscription = subscriptionService.updateSubscription(existingSubscription);
+        return ResponseEntity.ok(updatedSubscription);
+    }
     }
 
 
