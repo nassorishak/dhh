@@ -1,8 +1,8 @@
 package com.example.decoration_backend_springboot.API;
 import com.example.decoration_backend_springboot.Model.Product;
-import com.example.decoration_backend_springboot.Model.dto.ProductDTO;
-import com.example.decoration_backend_springboot.Service.PaymentService;
+import com.example.decoration_backend_springboot.Model.User;
 import com.example.decoration_backend_springboot.Service.ProductService;
+import com.example.decoration_backend_springboot.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +20,98 @@ public class ProductAPI {
     @Autowired
     private ProductService productService;
 
+    private  final UserService userService;
+
+    public ProductAPI(ProductService productService, UserService userService) {
+        this.productService = productService;
+        this.userService = userService;
+    }
+
+//    @PostMapping("/add/product")
+//    public Product addProduct(
+//            @RequestParam("productName") String productName,
+//            @RequestParam("productDescription") String productDescription,
+//            @RequestParam("price") Double price,
+//            @RequestParam("productCompany") String productCampany,
+//            @RequestParam("category") String category,
+//            @RequestParam("image") MultipartFile image) throws IOException{
+//        Product product = new Product();
+//         product.setProductName(productName);
+//         product.setProductDescription(productDescription);
+//         product.setImage(image.getBytes());
+//         product.setCategory(category);
+//         product.setPrice(price);
+//         product.setProductCompany(productCampany);
+//         return productService.save(product);
+//    }
+
+//    @PostMapping("/add/product")
+//    public Product addProduct(
+//            @RequestParam("productCode") String productCode,
+//            @RequestParam("productName") String productName,
+//            @RequestParam("productDescription") String productDescription,
+//            @RequestParam("price") Double price,
+//            @RequestParam("productCompany") String productCompany,
+//            @RequestParam("category") String category,
+//            @RequestParam("productUnit") String productUnit,
+//            @RequestParam("stockQuantity") Integer stockQuantity,
+//            @RequestParam Integer userId,
+//            @RequestParam(value = "image", required = false) MultipartFile image
+//    ) throws IOException {
+//
+//        Product product = new Product();
+//        product.setProductCode(productCode);
+//        product.setProductName(productName);
+//        product.setProductDescription(productDescription);
+//        product.setPrice(price);
+//        product.setCategory(category);
+//        product.setProductCompany(productCompany);
+//        product.setProductUnit(productUnit);
+//        product.setStockQuantity(stockQuantity);
+//        if (image != null && !image.isEmpty()) {
+//            product.setImage(image.getBytes());
+//        }
+//
+//        return productService.save(product);
+//    }
+
     @PostMapping("/add/product")
     public Product addProduct(
+            @RequestParam("productCode") String productCode,
             @RequestParam("productName") String productName,
             @RequestParam("productDescription") String productDescription,
             @RequestParam("price") Double price,
-            @RequestParam("productCompany") String productCampany,
+            @RequestParam("productCompany") String productCompany,
             @RequestParam("category") String category,
-            @RequestParam("image") MultipartFile image) throws IOException{
+            @RequestParam("productUnit") String productUnit,
+            @RequestParam("stockQuantity") Integer stockQuantity,
+            @RequestParam Integer userId, // ID of the user/vendor
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) throws IOException {
+
         Product product = new Product();
-         product.setProductName(productName);
-         product.setProductDescription(productDescription);
-         product.setImage(image.getBytes());
-         product.setCategory(category);
-         product.setPrice(price);
-         product.setProductCompany(productCampany);
-         return productService.save(product);
+        product.setProductCode(productCode);
+        product.setProductName(productName);
+        product.setProductDescription(productDescription);
+        product.setPrice(price);
+        product.setCategory(category);
+        product.setProductCompany(productCompany);
+        product.setProductUnit(productUnit);
+        product.setStockQuantity(stockQuantity);
+
+        if (image != null && !image.isEmpty()) {
+            product.setImage(image.getBytes());
+        }
+
+        // ✅ Fetch the User entity and set it
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        product.setUser(user);
+
+        return productService.save(product);
     }
+
+
 
     @PostMapping("/api/product")
     public ResponseEntity<String> addProduct(@RequestPart("product") Product product,

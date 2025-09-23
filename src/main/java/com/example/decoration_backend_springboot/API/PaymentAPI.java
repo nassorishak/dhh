@@ -126,23 +126,82 @@ public class PaymentAPI {
     }
 
 
+//    @PostMapping("/orders/{orderId}/payment/{controlNumber}")
+//    public ResponseEntity<PaymentResponse> payAmount(@PathVariable Long orderId,
+//                                                     @PathVariable String controlNumber,
+//                                                     @RequestBody PaymentRequest paymentRequest) {
+//        // Validate the payment request
+//        if (paymentRequest.getAmount() <= 0) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//
+//        // Fetch the order by orderId and control number
+//        Order order = orderRepository.findByOrderIdAndControlNumber(Math.toIntExact(orderId), controlNumber);
+//
+//        if (order == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        // Optional: Check if there’s already a payment done for this order
+//        if ("complete".equals(order.getPaymentStatus())) {
+//            return new ResponseEntity<>(HttpStatus.CONFLICT); // Payment already completed
+//        }
+//
+//        // Create and configure the payment entity
+//        Payment payment = new Payment();
+//        payment.setAmount(paymentRequest.getAmount());
+//        payment.setPaymentDate(new Timestamp(System.currentTimeMillis()));
+//        payment.setStatus("Paid");
+//        payment.setPaymentMethod("BANK");
+//        payment.setOrderId(order.getOrderId());
+//        payment.setOrder(order);
+//
+//        try {
+//            // Save the payment
+//            paymentService.save(payment);
+//
+//            // Fetch the customer's email from the order
+//            String customerEmail = order.getCustomer().getEmail(); // Assuming Order has a Customer reference
+//
+//            // Send a confirmation email
+//            String subject = "Payment Confirmation";
+//            String text = "Dear " + order.getCustomer().getFirstName() + ",\n\n" +
+//                    "Thank you for your payment of " + paymentRequest.getAmount() + ". Your order is now complete.\n\n" +
+//                    "Order ID: " + orderId + "\n" +
+//                    "Control Number: " + controlNumber + "\n\n" +
+//                    "Best regards,\nYour Company";
+//            service.sendEmail(customerEmail, subject, text);
+//
+//        } catch (Exception e) {
+//            // Log the exception (not shown here, but you should log it)
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        // Create and return the payment response
+//        PaymentResponse paymentResponse = new PaymentResponse(payment);
+//        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+//    }
+//
+//
+
     @PostMapping("/orders/{orderId}/payment/{controlNumber}")
-    public ResponseEntity<PaymentResponse> payAmount(@PathVariable Long orderId,
+    public ResponseEntity<PaymentResponse> payAmount(@PathVariable int orderId, // Changed from Long to int
                                                      @PathVariable String controlNumber,
                                                      @RequestBody PaymentRequest paymentRequest) {
+
         // Validate the payment request
         if (paymentRequest.getAmount() <= 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         // Fetch the order by orderId and control number
-        Order order = orderRepository.findByOrderIdAndControlNumber(Math.toIntExact(orderId), controlNumber);
+        Order order = orderRepository.findByOrderIdAndControlNumber(orderId, controlNumber); // Removed Math.toIntExact
 
         if (order == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // Optional: Check if there’s already a payment done for this order
+        // Optional: Check if there's already a payment done for this order
         if ("complete".equals(order.getPaymentStatus())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT); // Payment already completed
         }
@@ -160,20 +219,24 @@ public class PaymentAPI {
             // Save the payment
             paymentService.save(payment);
 
+            // Update order payment status
+            order.setPaymentStatus("complete");
+            orderRepository.save(order);
+
             // Fetch the customer's email from the order
-            String customerEmail = order.getCustomer().getEmail(); // Assuming Order has a Customer reference
+            String customerEmail = order.getCustomer().getEmail();
 
             // Send a confirmation email
             String subject = "Payment Confirmation";
             String text = "Dear " + order.getCustomer().getFirstName() + ",\n\n" +
-                    "Thank you for your payment of " + paymentRequest.getAmount() + ". Your order is now complete.\n\n" +
+                    "Thank you for your payment of $" + paymentRequest.getAmount() + ". Your order is now complete.\n\n" +
                     "Order ID: " + orderId + "\n" +
                     "Control Number: " + controlNumber + "\n\n" +
                     "Best regards,\nYour Company";
             service.sendEmail(customerEmail, subject, text);
 
         } catch (Exception e) {
-            // Log the exception (not shown here, but you should log it)
+            e.printStackTrace(); // Add proper logging
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -181,8 +244,6 @@ public class PaymentAPI {
         PaymentResponse paymentResponse = new PaymentResponse(payment);
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
-
-
 
     }
 
