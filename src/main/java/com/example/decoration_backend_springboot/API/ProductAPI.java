@@ -75,6 +75,42 @@ public class ProductAPI {
 //        return productService.save(product);
 //    }
 
+//    @PostMapping("/add/product")
+//    public Product addProduct(
+//            @RequestParam("productCode") String productCode,
+//            @RequestParam("productName") String productName,
+//            @RequestParam("productDescription") String productDescription,
+//            @RequestParam("price") Double price,
+//            @RequestParam("productCompany") String productCompany,
+//            @RequestParam("category") String category,
+//            @RequestParam("productUnit") String productUnit,
+//            @RequestParam("stockQuantity") Integer stockQuantity,
+//            @RequestParam Integer userId, // ID of the user/vendor
+//            @RequestParam(value = "image", required = false) MultipartFile image
+//    ) throws IOException {
+//
+//        Product product = new Product();
+//        product.setProductCode(productCode);
+//        product.setProductName(productName);
+//        product.setProductDescription(productDescription);
+//        product.setPrice(price);
+//        product.setCategory(category);
+//        product.setProductCompany(productCompany);
+//        product.setProductUnit(productUnit);
+//        product.setStockQuantity(stockQuantity);
+//
+//        if (image != null && !image.isEmpty()) {
+//            product.setImage(image.getBytes());
+//        }
+//
+//        // ✅ Fetch the User entity and set it
+//        User user = userService.findById(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+//        product.setUser(user);
+//
+//        return productService.save(product);
+//    }
+
     @PostMapping("/add/product")
     public Product addProduct(
             @RequestParam("productCode") String productCode,
@@ -85,7 +121,7 @@ public class ProductAPI {
             @RequestParam("category") String category,
             @RequestParam("productUnit") String productUnit,
             @RequestParam("stockQuantity") Integer stockQuantity,
-            @RequestParam Integer userId, // ID of the user/vendor
+            @RequestParam(value = "userId", required = false) Integer userId, // ✅ optional now
             @RequestParam(value = "image", required = false) MultipartFile image
     ) throws IOException {
 
@@ -99,17 +135,21 @@ public class ProductAPI {
         product.setProductUnit(productUnit);
         product.setStockQuantity(stockQuantity);
 
+        // Handle image if present
         if (image != null && !image.isEmpty()) {
             product.setImage(image.getBytes());
         }
 
-        // ✅ Fetch the User entity and set it
-        User user = userService.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-        product.setUser(user);
+        // Only set user/vendor if userId is provided (for vendors)
+        if (userId != null) {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+            product.setUser(user);
+        }
 
         return productService.save(product);
     }
+
 
 
 
