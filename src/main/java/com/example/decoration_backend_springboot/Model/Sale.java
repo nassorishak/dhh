@@ -15,18 +15,19 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer saleId;
 
-    private LocalDate date; // standard sale date
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
+
     private Integer quantity;
-
     private Double unitPrice;
-
     private Double totalPrice;
-
     private String customerName;
 
     @PrePersist
@@ -37,8 +38,7 @@ public class Sale {
         }
     }
 
-    // Existing getters and setters...
-
+    // Getters and setters...
     public Integer getSaleId() {
         return saleId;
     }
@@ -61,6 +61,14 @@ public class Sale {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
     public Integer getQuantity() {
@@ -95,11 +103,15 @@ public class Sale {
         this.customerName = customerName;
     }
 
-    // Add this method to access product's ID
+    // Helper method to get product ID
     public Integer getProductId() {
-        if (product != null) {
-            return product.getProductId();
-        }
-        return null;
+        return product != null ? product.getProductId() : null;
     }
+
+    // Fixed: Get actual stock ID from stock field
+    public Integer getStockId() {
+        return stock != null ? stock.getStockId() : null;
+    }
+
+
 }

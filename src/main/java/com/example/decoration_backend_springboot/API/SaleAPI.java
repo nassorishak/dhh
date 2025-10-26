@@ -1,12 +1,14 @@
 package com.example.decoration_backend_springboot.API;
 import com.example.decoration_backend_springboot.Model.Sale;
 import com.example.decoration_backend_springboot.Service.SaleService;
+import com.example.decoration_backend_springboot.Service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -16,9 +18,11 @@ public class SaleAPI {
 
         private final SaleService saleService;
 
+         private  final StockService stockService;
         @Autowired
-        public SaleAPI(SaleService saleService) {
+        public SaleAPI(SaleService saleService, StockService stockService) {
             this.saleService = saleService;
+            this.stockService = stockService;
         }
 
         @GetMapping("/all-sales")
@@ -82,13 +86,56 @@ public class SaleAPI {
             return ResponseEntity.ok(totalQuantity);
         }
 
-        @PostMapping("/add-sale")
-        public ResponseEntity<Sale> createSale(@RequestBody Sale sale) {
-            Sale createdSale = saleService.createSale(sale);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdSale);
+//        @PostMapping("/add-sale")
+//        public ResponseEntity<Sale> createSale(@RequestBody Sale sale) {
+//            Sale createdSale = saleService.createSale(sale);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(createdSale);
+//        }
+@PostMapping("/add-sale")
+public ResponseEntity<?> createSale(@RequestBody Sale sale) {
+    try {
+        // Validate input
+        if (sale.getProduct() == null || sale.getProduct().getProductId() == null) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("error", "Validation error", "message", "Product ID is required")
+            );
         }
 
-        @PutMapping("/{id}")
+        // Initialize stock for the product if it doesn't exist
+        stockService.initializeStockForProduct(sale.getProduct().getProductId());
+
+        Sale createdSale = saleService.createSale(sale);
+
+        // Update stock after sale
+        stockService.updateStockOnSale(createdSale);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSale);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(
+                Map.of("error", "Validation error", "message", e.getMessage())
+        );
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of("error", "Server error", "message", e.getMessage())
+        );
+    }
+}
+
+    // Add an endpoint to initialize all stock records
+    @PostMapping("/initialize-all-stocks")
+    public ResponseEntity<?> initializeAllStocks() {
+        try {
+            stockService.initializeStockForAllProducts();
+            return ResponseEntity.ok(Map.of("message", "All stock records initialized successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    Map.of("error", "Failed to initialize stocks", "message", e.getMessage())
+            );
+        }
+    }
+
+    @PutMapping("/{id}")
         public ResponseEntity<Sale> updateSale(@PathVariable Integer id, @RequestBody Sale sale) {
             Sale updatedSale = saleService.updateSale(id, sale);
             if (updatedSale != null) {

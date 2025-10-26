@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleService {
@@ -41,8 +42,15 @@ public class SaleService {
 
     public List<Sale> getSalesByProduct(Integer productId) {
         return saleRepository.findAll().stream()
-                .filter(sale -> sale.getProductId() != null &&
-                        sale.getProductId().equals(productId))
+                .filter(sale -> sale.getProduct() != null &&
+                        sale.getProduct().getProductId().equals(productId))
+                .toList();
+    }
+
+    public List<Sale> getSalesByStock(Integer stockId) {
+        return saleRepository.findAll().stream()
+                .filter(sale -> sale.getStock() != null &&
+                        sale.getStock().getStockId().equals(stockId))
                 .toList();
     }
 
@@ -64,6 +72,9 @@ public class SaleService {
             if (saleDetails.getProduct() != null) {
                 existingSale.setProduct(saleDetails.getProduct());
             }
+            if (saleDetails.getStock() != null) {
+                existingSale.setStock(saleDetails.getStock());
+            }
             if (saleDetails.getQuantity() != null) {
                 existingSale.setQuantity(saleDetails.getQuantity());
             }
@@ -79,7 +90,7 @@ public class SaleService {
 
             return saleRepository.save(existingSale);
         }
-        return null; // Or handle as needed
+        return null;
     }
 
     public void deleteSale(Integer id) {
@@ -114,9 +125,22 @@ public class SaleService {
     }
 
     public Integer getTotalQuantitySoldByProduct(Integer productId) {
-        return saleRepository.findAll().stream()
-                .filter(sale -> sale.getProductId() != null && sale.getProductId().equals(productId))
-                .mapToInt(sale -> sale.getQuantity() != null ? sale.getQuantity() : 0)
-                .sum();
+        Integer quantity = saleRepository.sumQuantitySoldByProductId(productId);
+        return quantity != null ? quantity : 0;
     }
+
+    public Integer getTotalQuantitySoldByStock(Integer stockId) {
+        Integer quantity = saleRepository.sumQuantitySoldByStockId(stockId);
+        return quantity != null ? quantity : 0;
+    }
+
+    public List<Sale> getSalesByMonth(int month, int year) {
+        return saleRepository.findAll().stream()
+                .filter(sale -> sale.getDate() != null &&
+                        sale.getDate().getMonthValue() == month &&
+                        sale.getDate().getYear() == year)
+                .collect(Collectors.toList());
+    }
+
+    
 }

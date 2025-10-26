@@ -53,6 +53,10 @@ public class Product {
 
         private Double price;
 
+        private Double latestPurchasePrice;
+
+        private Double sellingPrice;
+
         private String productCompany;
 
         private String productUnit;   // ✅ Added product unit (e.g., piece, kg, meter)
@@ -65,11 +69,16 @@ public class Product {
 
         private String category;
 
+
+
         // ✅ Many-to-One relationship with User
         @ManyToOne
         @JoinColumn(name = "userId", referencedColumnName = "userId")
         private User user; // ✅ Use the entity, not Integer
 
+        @ManyToOne
+        @JoinColumn(name = "shelf_id")
+        private Shelf shelf;
 
         public Integer getProductId() {
                 return productId;
@@ -158,5 +167,13 @@ public class Product {
 
         public void setUser(User user) {
                 this.user = user;
+        }
+
+        public Shelf getShelf() {
+                return shelf;
+        }
+
+        public void setShelf(Shelf shelf) {
+                this.shelf = shelf;
         }
 }

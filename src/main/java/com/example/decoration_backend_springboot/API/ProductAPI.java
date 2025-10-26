@@ -2,6 +2,7 @@ package com.example.decoration_backend_springboot.API;
 import com.example.decoration_backend_springboot.Model.Product;
 import com.example.decoration_backend_springboot.Model.User;
 import com.example.decoration_backend_springboot.Service.ProductService;
+import com.example.decoration_backend_springboot.Service.ShelfService;
 import com.example.decoration_backend_springboot.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,16 +15,18 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/product")
 public class ProductAPI {
     @Autowired
     private ProductService productService;
 
+     private  final ShelfService shelfService;
     private  final UserService userService;
 
-    public ProductAPI(ProductService productService, UserService userService) {
+    public ProductAPI(ProductService productService, ShelfService shelfService, UserService userService) {
         this.productService = productService;
+        this.shelfService = shelfService;
         this.userService = userService;
     }
 
@@ -111,17 +114,109 @@ public class ProductAPI {
 //        return productService.save(product);
 //    }
 
+//    @PostMapping("/add/product")
+//    public Product addProduct(
+//            @RequestParam("productCode") String productCode,
+//            @RequestParam("productName") String productName,
+//            @RequestParam("productDescription") String productDescription,
+//            @RequestParam("price") Double price,
+//            @RequestParam("productCompany") String productCompany,
+//            @RequestParam("category") String category,
+//            @RequestParam("productUnit") String productUnit,
+//            @RequestParam("stockQuantity") Integer stockQuantity,
+//            @RequestParam(value = "userId", required = false) Integer userId, // ✅ optional now
+//            @RequestParam(value = "image", required = false) MultipartFile image
+//    ) throws IOException {
+//
+//        Product product = new Product();
+//        product.setProductCode(productCode);
+//        product.setProductName(productName);
+//        product.setProductDescription(productDescription);
+//        product.setPrice(price);
+//        product.setCategory(category);
+//        product.setProductCompany(productCompany);
+//        product.setProductUnit(productUnit);
+//        product.setStockQuantity(stockQuantity);
+//
+//        // Handle image if present
+//        if (image != null && !image.isEmpty()) {
+//            product.setImage(image.getBytes());
+//        }
+//
+//        // Only set user/vendor if userId is provided (for vendors)
+//        if (userId != null) {
+//            User user = userService.findById(userId)
+//                    .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+//            product.setUser(user);
+//        }
+//
+//        return productService.save(product);
+//    }
+//
+//
+//@PostMapping("/add/product")
+//public Product addProduct(
+//        @RequestParam("productCode") String productCode,
+//        @RequestParam("productName") String productName,
+//        @RequestParam("productDescription") String productDescription,
+//        @RequestParam("price") Double price,
+//        @RequestParam("latestPurchasePrice") Double latestPurchasePrice, // ✅ ADD THIS
+//        @RequestParam("sellingPrice") Double sellingPrice, // ✅ ADD THIS
+//        @RequestParam("productCompany") String productCompany,
+//        @RequestParam("category") String category,
+//        @RequestParam("productUnit") String productUnit,
+//        @RequestParam("stockQuantity") Integer stockQuantity,
+//        @RequestParam(value = "userId", required = false) Integer userId,
+//        @RequestParam("shelfId") Integer shelfId,
+//        @RequestParam(value = "image", required = false) MultipartFile image
+//) throws IOException {
+//
+//    Product product = new Product();
+//    product.setProductCode(productCode);
+//    product.setProductName(productName);
+//    product.setProductDescription(productDescription);
+//    product.setPrice(price);
+//    product.setLatestPurchasePrice(latestPurchasePrice); // ✅ SET THIS
+//    product.setSellingPrice(sellingPrice); // ✅ SET THIS
+//    product.setCategory(category);
+//    product.setProductCompany(productCompany);
+//    product.setProductUnit(productUnit);
+//    product.setStockQuantity(stockQuantity);
+//
+//    if (image != null && !image.isEmpty()) {
+//        product.setImage(image.getBytes());
+//    }
+//
+//    // ✅ Set Vendor (if provided)
+//    if (userId != null) {
+//        User user = userService.findById(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+//        product.setUser(user);
+//    }
+//
+//    // ✅ Set Shelf
+//    com.example.decoration_backend_springboot.Model.Shelf shelf =
+//            shelfService.findById(shelfId)
+//                    .orElseThrow(() -> new RuntimeException("Shelf not found with id: " + shelfId));
+//    product.setShelf(shelf);
+//
+//    return productService.save(product);
+//}
+
     @PostMapping("/add/product")
     public Product addProduct(
             @RequestParam("productCode") String productCode,
             @RequestParam("productName") String productName,
             @RequestParam("productDescription") String productDescription,
             @RequestParam("price") Double price,
+            @RequestParam("latestPurchasePrice") Double latestPurchasePrice,
+            @RequestParam("sellingPrice") Double sellingPrice,
             @RequestParam("productCompany") String productCompany,
             @RequestParam("category") String category,
             @RequestParam("productUnit") String productUnit,
             @RequestParam("stockQuantity") Integer stockQuantity,
-            @RequestParam(value = "userId", required = false) Integer userId, // ✅ optional now
+            @RequestParam(value = "userId", required = false) Integer userId, // This should be received
+            @RequestParam("shelfId") Integer shelfId,
             @RequestParam(value = "image", required = false) MultipartFile image
     ) throws IOException {
 
@@ -130,28 +225,94 @@ public class ProductAPI {
         product.setProductName(productName);
         product.setProductDescription(productDescription);
         product.setPrice(price);
+        product.setLatestPurchasePrice(latestPurchasePrice);
+        product.setSellingPrice(sellingPrice);
         product.setCategory(category);
         product.setProductCompany(productCompany);
         product.setProductUnit(productUnit);
         product.setStockQuantity(stockQuantity);
 
-        // Handle image if present
         if (image != null && !image.isEmpty()) {
             product.setImage(image.getBytes());
         }
 
-        // Only set user/vendor if userId is provided (for vendors)
+        // ✅ FIX: Properly set User relationship
         if (userId != null) {
-            User user = userService.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-            product.setUser(user);
+            try {
+                User user = userService.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                product.setUser(user);
+                System.out.println("✅ User set successfully: " + user.getUserId()); // Debug log
+            } catch (Exception e) {
+                System.out.println("❌ Error setting user: " + e.getMessage()); // Debug log
+                // You can choose to throw the exception or continue without user
+                throw new RuntimeException("Failed to set user: " + e.getMessage());
+            }
+        } else {
+            System.out.println("ℹ️ No userId provided, product will have no user association"); // Debug log
         }
 
-        return productService.save(product);
+        // ✅ Set Shelf
+        com.example.decoration_backend_springboot.Model.Shelf shelf =
+                shelfService.findById(shelfId)
+                        .orElseThrow(() -> new RuntimeException("Shelf not found with id: " + shelfId));
+        product.setShelf(shelf);
+
+        Product savedProduct = productService.save(product);
+        System.out.println("✅ Product saved with ID: " + savedProduct.getProductId()); // Debug log
+        if (savedProduct.getUser() != null) {
+            System.out.println("✅ Product user ID: " + savedProduct.getUser().getUserId()); // Debug log
+        } else {
+            System.out.println("❌ Product user is null"); // Debug log
+        }
+
+        return savedProduct;
     }
 
-
-
+//    @PostMapping("/add/product")
+//    public Product addProduct(
+//            @RequestParam("productCode") String productCode,
+//            @RequestParam("productName") String productName,
+//            @RequestParam("productDescription") String productDescription,
+//            @RequestParam("price") Double price,
+//            @RequestParam("productCompany") String productCompany,
+//            @RequestParam("category") String category,
+//            @RequestParam("productUnit") String productUnit,
+//            @RequestParam("stockQuantity") Integer stockQuantity,
+//            @RequestParam(value = "userId", required = false) Integer userId,
+//            @RequestParam("shelfId") Integer shelfId, // ✅ NEW
+//            @RequestParam(value = "image", required = false) MultipartFile image
+//    ) throws IOException {
+//
+//        Product product = new Product();
+//        product.setProductCode(productCode);
+//        product.setProductName(productName);
+//        product.setProductDescription(productDescription);
+//        product.setPrice(price);
+//        product.setCategory(category);
+//        product.setProductCompany(productCompany);
+//        product.setProductUnit(productUnit);
+//        product.setStockQuantity(stockQuantity);
+//
+//        if (image != null && !image.isEmpty()) {
+//            product.setImage(image.getBytes());
+//        }
+//
+//        // ✅ Set Vendor (if provided)
+//        if (userId != null) {
+//            User user = userService.findById(userId)
+//                    .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+//            product.setUser(user);
+//        }
+//
+//        // ✅ Set Shelf
+//        com.example.decoration_backend_springboot.Model.Shelf shelf =
+//                shelfService.findById(shelfId)
+//                        .orElseThrow(() -> new RuntimeException("Shelf not found with id: " + shelfId));
+//        product.setShelf(shelf);
+//
+//        return productService.save(product);
+//    }
 
     @PostMapping("/api/product")
     public ResponseEntity<String> addProduct(@RequestPart("product") Product product,
@@ -198,19 +359,28 @@ public class ProductAPI {
             return new ResponseEntity<>("An error occurred while updating the product: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("delete/{product_id}")
-    public  ResponseEntity<?> deleteProduct(@PathVariable int product_id){
-
-        try {
-            productService.deleteById(product_id);
-            return new ResponseEntity<>("product was deleted successful",HttpStatus.OK);
-
-        }catch (Exception e){
-            return  new ResponseEntity<>("product not deleted",HttpStatus.BAD_REQUEST);
-        }
-
+//    @DeleteMapping("delete/{product_id}")
+//    public  ResponseEntity<?> deleteProduct(@PathVariable int product_id){
+//
+//        try {
+//            productService.deleteById(product_id);
+//            return new ResponseEntity<>("product was deleted successful",HttpStatus.OK);
+//
+//        }catch (Exception e){
+//            return  new ResponseEntity<>("product not deleted",HttpStatus.BAD_REQUEST);
+//        }
+//
+//    }
+@DeleteMapping("/delete/{product_id}")
+public ResponseEntity<?> deleteProduct(@PathVariable int product_id) {
+    try {
+        productService.deleteById(product_id);
+        return new ResponseEntity<>("Product was deleted successfully", HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>("Product not deleted", HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("getByID/{product_id}")
+}
+    @GetMapping("/getByID/{product_id}")
     public ResponseEntity<?> getProductById(@PathVariable int product_id){
 
         try {
