@@ -1,87 +1,116 @@
+//package com.example.decoration_backend_springboot.Model;
+//
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
+//import jakarta.persistence.Id;
+//import lombok.Data;
+//
+//import java.util.Date;
+//@Data
+//public class PaymentResponse {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int paymentId;
+//    private Double amount;
+//    private String paymentMethod;
+//    private String status;
+//    private Date PaymentDate;
+//
+//    private  String controlNumber;
+//
+//    public PaymentResponse(int paymentId, Double amount, String paymentMethod, String status, Date paymentDate, String controlNumber) {
+//        this.paymentId = paymentId;
+//        this.amount = amount;
+//        this.paymentMethod = paymentMethod;
+//        this.status = status;
+//        PaymentDate = paymentDate;
+//        this.controlNumber = controlNumber;
+//    }
+//
+//    public PaymentResponse(Payment payment) {
+//    }
+//
+//    public PaymentResponse(String receipt) {
+//
+//    }
+//
+//    public PaymentResponse(int paymentId, String controlNumber, double amount, String paymentMethod, String status, Date paymentDate) {
+//    }
+//
+//    public PaymentResponse(boolean b, String s, Object o) {
+//    }
+//
+//    public int getPaymentId() {
+//        return paymentId;
+//    }
+//
+//    public void setPaymentId(int paymentId) {
+//        this.paymentId = paymentId;
+//    }
+//
+//    public Double getAmount() {
+//        return amount;
+//    }
+//
+//    public void setAmount(Double amount) {
+//        this.amount = amount;
+//    }
+//
+//    public String getPaymentMethod() {
+//        return paymentMethod;
+//    }
+//
+//    public void setPaymentMethod(String paymentMethod) {
+//        this.paymentMethod = paymentMethod;
+//    }
+//
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
+//
+//    public Date getPaymentDate() {
+//        return PaymentDate;
+//    }
+//
+//    public void setPaymentDate(Date paymentDate) {
+//        PaymentDate = paymentDate;
+//    }
+//
+//    public String getControlNumber() {
+//        return controlNumber;
+//    }
+//
+//    public void setControlNumber(String controlNumber) {
+//        this.controlNumber = controlNumber;
+//    }
+//}
 package com.example.decoration_backend_springboot.Model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
+import java.util.Map;
 
-import java.util.Date;
-@Data
 public class PaymentResponse {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int paymentId;
-    private Double amount;
-    private String paymentMethod;
-    private String status;
-    private Date PaymentDate;
+    private boolean success;
+    private String message;
+    private Map<String, Object> data;
 
-    private  String controlNumber;
+    public PaymentResponse() {}
 
-    public PaymentResponse(int paymentId, Double amount, String paymentMethod, String status, Date paymentDate, String controlNumber) {
-        this.paymentId = paymentId;
-        this.amount = amount;
-        this.paymentMethod = paymentMethod;
-        this.status = status;
-        PaymentDate = paymentDate;
-        this.controlNumber = controlNumber;
+    public PaymentResponse(boolean success, String message, Map<String, Object> data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
     }
 
-    public PaymentResponse(Payment payment) {
-    }
+    public boolean isSuccess() { return success; }
+    public void setSuccess(boolean success) { this.success = success; }
 
-    public PaymentResponse(String receipt) {
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 
-    }
-
-    public PaymentResponse(int paymentId, String controlNumber, double amount, String paymentMethod, String status, Date paymentDate) {
-    }
-
-    public int getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(int paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getPaymentDate() {
-        return PaymentDate;
-    }
-
-    public void setPaymentDate(Date paymentDate) {
-        PaymentDate = paymentDate;
-    }
-
-    public String getControlNumber() {
-        return controlNumber;
-    }
-
-    public void setControlNumber(String controlNumber) {
-        this.controlNumber = controlNumber;
-    }
+    public Map<String, Object> getData() { return data; }
+    public void setData(Map<String, Object> data) { this.data = data; }
 }

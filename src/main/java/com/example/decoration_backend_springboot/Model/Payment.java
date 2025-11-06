@@ -38,6 +38,72 @@ public class Payment {
 
         }
 
+        public int getPaymentId() {
+                return paymentId;
+        }
+
+        public void setPaymentId(int paymentId) {
+                this.paymentId = paymentId;
+        }
+
+        public double getAmount() {
+                return amount;
+        }
+
+        public void setAmount(double amount) {
+                this.amount = amount;
+        }
+
+        public String getPaymentMethod() {
+                return paymentMethod;
+        }
+
+        public void setPaymentMethod(String paymentMethod) {
+                this.paymentMethod = paymentMethod;
+        }
+
+        public String getStatus() {
+                return status;
+        }
+
+        public void setStatus(String status) {
+                this.status = status;
+        }
+
+        public Date getPaymentDate() {
+                return PaymentDate;
+        }
+
+        public void setPaymentDate(Date paymentDate) {
+                PaymentDate = paymentDate;
+        }
+
+        public String getControlNumber() {
+                return controlNumber;
+        }
+
+        public void setControlNumber(String controlNumber) {
+                this.controlNumber = controlNumber;
+        }
+
+        public Order getOrder() {
+                return order;
+        }
+
+        public void setOrder(Order order) {
+                this.order = order;
+        }
+
+        public void setPhoneNumber(String phoneNumber) {
+        }
+
+        public void setTransactionId(String transactionId) {
+        }
+
+        public String getTransactionId() {
+                return toString();
+        }
+
 
         // getters and setters
 }
