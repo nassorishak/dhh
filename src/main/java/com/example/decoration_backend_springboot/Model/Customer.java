@@ -1,33 +1,36 @@
 package com.example.decoration_backend_springboot.Model;
-
+import com.example.decoration_backend_springboot.Model.Enum.Role;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.Data;
-
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 @Entity
-@Data
-public class Customer extends User{
-    private  String custAddress;
-    private String phone;
-    private String name;
+@Table(name = "customer")
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Customer extends User {
 
-    public Customer(String custAddress, String phone, String name) {
+    @Column(name = "cust_address")
+    private String custAddress;
+
+    private String phone;
+
+    // Default constructor
+    public Customer() {
+        super();
+    }
+
+    // Parameterized constructor
+    public Customer(String email, String password, String custAddress, String phone) {
+        super();
+        this.setEmail(email);
+
+        this.setPassword(password);
+        this.setRole(Role.CUSTOMER);
         this.custAddress = custAddress;
         this.phone = phone;
-        this.name = name;
     }
 
-    public Customer(String email, String password, String customer, String name, String custAddress, String phone) {
-
-    }
-
-    public Customer() {
-
-    }
-
-    public String getName() {
-        return name;
-    }
-
+    // Getters and setters
     public String getCustAddress() {
         return custAddress;
     }
@@ -42,9 +45,5 @@ public class Customer extends User{
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

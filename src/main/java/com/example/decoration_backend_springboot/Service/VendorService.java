@@ -4,6 +4,7 @@ import com.example.decoration_backend_springboot.Model.Vendor;
 import com.example.decoration_backend_springboot.Repository.ProductRepository;
 import com.example.decoration_backend_springboot.Repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,6 +93,14 @@ public class VendorService {
             return true;
         }
         return false;
+    }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public Vendor addVendor(Vendor vendor) {
+        vendor.setPassword(passwordEncoder.encode(vendor.getPassword())); // Encrypt password
+        return vendorRepository.save(vendor);
     }
 
     public boolean unblockVendor(int vendorId) {

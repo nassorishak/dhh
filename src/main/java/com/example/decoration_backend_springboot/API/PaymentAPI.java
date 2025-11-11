@@ -614,7 +614,7 @@ public class PaymentAPI {
             responseData.put("phoneNumber", phoneNumber);
             responseData.put("network", request.getNetwork());
             responseData.put("paymentDate", new Timestamp(System.currentTimeMillis()));
-            responseData.put("customerName", order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName());
+            responseData.put("customerName", order.getCustomer().getName() + " " + order.getCustomer().getName());
             responseData.put("balance", paymentResult.get("balance"));
 
             return ResponseEntity.ok(new PaymentResponse(
@@ -759,7 +759,7 @@ public class PaymentAPI {
     private void sendPaymentConfirmationEmail(Order order, Payment payment, String phoneNumber) {
         try {
             String customerEmail = order.getCustomer().getEmail();
-            String customerName = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
+            String customerName = order.getCustomer().getName() + " " + order.getCustomer().getName();
             String subject = "Payment Confirmation - Order #" + order.getControlNumber();
 
             String text = "Dear " + customerName + ",\n\n" +
