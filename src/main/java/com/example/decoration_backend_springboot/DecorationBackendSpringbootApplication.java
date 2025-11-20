@@ -8,11 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class  DecorationBackendSpringbootApplication {
-//	@Bean
-//	public BCryptPasswordEncoder passwordEncoder(){
-//		return new BCryptPasswordEncoder();
-//	}
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
